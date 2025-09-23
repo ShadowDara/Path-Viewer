@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -55,7 +56,7 @@ inline std::vector<std::string> SplitPath(const std::string& path)
 // Setzt die PATH-Variable in der aktuellen Umgebung
 inline bool WritePathVariable(const std::string& newPath)
 {
-    // Windows: Setzt die Umgebungsvariable f�r den aktuellen Prozess
+    // Windows: Setzt die Umgebungsvariable für den aktuellen Prozess
     if (SetEnvironmentVariableA("PATH", newPath.c_str()))
         return true;
     else
@@ -63,6 +64,33 @@ inline bool WritePathVariable(const std::string& newPath)
         std::cerr << "Error while Updating PATH: " << GetLastError() << std::endl;
         return false;
     }
+}
+
+// Update Path Variables for the Logged User
+bool SetUserPath(const std::string& newPath)
+{
+    HKEY hKey;
+    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, "Environment", 0, KEY_SET_VALUE, &hKey);
+    if (result != ERROR_SUCCESS)
+    {
+        std::cerr << "Failed to open registry key: " << result << std::endl;
+        return false;
+    }
+
+    result = RegSetValueExA(hKey, "PATH", 0, REG_EXPAND_SZ, (const BYTE*)newPath.c_str(), (DWORD)(newPath.size() + 1));
+    RegCloseKey(hKey);
+
+    if (result != ERROR_SUCCESS)
+    {
+        std::cerr << "Failed to set PATH in registry: " << result << std::endl;
+        return false;
+    }
+
+    // Broadcast Änderung an das System (für laufende Prozesse)
+    SendMessageTimeoutA(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+                        (LPARAM)"Environment", SMTO_ABORTIFHUNG, 5000, nullptr);
+
+    return true;
 }
 
 void OpenFileInDefaultEditor(const std::string& filepath)
