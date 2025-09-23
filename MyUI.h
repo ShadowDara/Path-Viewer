@@ -115,9 +115,9 @@ inline void RenderPathViewer()
             newPath += ";";
         }
 
-        //if (WritePathVariable(newPath)) {
-        //    std::cout << "PATH updated successfully.\n";
-        //}
+        if (WritePathVariable(newPath)) {
+            std::cout << "PATH updated successfully.\n";
+        }
 
 		std::cout << "New PATH:\n" << newPath << "\n";
     }
@@ -186,7 +186,7 @@ inline void RenderPathViewer()
     }
 
     ImGui::SameLine();
-    if (ImGui::Button("CONSOLE OUTPUT"))
+    if (ImGui::Button("OPEN CONSOLE OUTPUT"))
     {
         // Konsole nur jetzt erzeugen
         EnsureConsole();

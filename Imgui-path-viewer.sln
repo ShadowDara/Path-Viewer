@@ -9,6 +9,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Relase+Static|x64 = Relase+Static|x64
+		Relase+Static|x86 = Relase+Static|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +19,10 @@ Global
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Debug|x64.Build.0 = Debug|x64
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Debug|x86.ActiveCfg = Debug|Win32
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Debug|x86.Build.0 = Debug|Win32
+		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Relase+Static|x64.ActiveCfg = Relase+Static|x64
+		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Relase+Static|x64.Build.0 = Relase+Static|x64
+		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Relase+Static|x86.ActiveCfg = Relase+Static|Win32
+		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Relase+Static|x86.Build.0 = Relase+Static|Win32
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Release|x64.ActiveCfg = Release|x64
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Release|x64.Build.0 = Release|x64
 		{E0B841D6-97C4-4AB2-9F5B-DED208DB640F}.Release|x86.ActiveCfg = Release|Win32
