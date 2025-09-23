@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headerdateien\imgui">
+      <UniqueIdentifier>{cbbf855d-9e74-4a6e-8549-52a7192656e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\imgui">
+      <UniqueIdentifier>{530e05d8-a0c1-4853-90c7-57d725490755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\GLFW">
+      <UniqueIdentifier>{ac0d1d46-7695-49d0-83f6-aeb37b166c9f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Imgui-path-viewer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Quelldateien\imgui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_glfw.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Headerdateien\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="glfw\glfw3.h">
+      <Filter>Headerdateien\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFW\glfw3native.h">
+      <Filter>Headerdateien\GLFW</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
