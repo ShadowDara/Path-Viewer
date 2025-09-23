@@ -3,12 +3,14 @@
 #include "imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
 
+#include <windows.h>
+
 #include <iostream>
 
 #include "MyUI.h"
 
 // Main code
-int main()
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // GLFW initialisieren
     if (!glfwInit())

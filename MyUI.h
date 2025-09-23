@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+#include "LazyConsole.h"
+
 inline void RenderPathViewer()
 {
     // Fullscreen-Fenster Flags
@@ -29,6 +31,7 @@ inline void RenderPathViewer()
     std::string path = GetPathVariable();
     auto entries = SplitPath(path);
 
+    // Title
     ImGui::Text("WINDOWS PATH ENTRYS:");
     ImGui::Separator();
 
@@ -127,13 +130,26 @@ inline void RenderPathViewer()
     }
 
     ImGui::SameLine();
+    if (ImGui::Button("DUMB TO CONSOLE"))
+    {
+        std::string newPath;
+        for (size_t i = 0; i < editableEntries.size(); ++i) {
+            newPath += editableEntries[i];
+            newPath += ";";
+        }
+		std::cout << "DUMB VARS TO CONSOLE:\n" << newPath << "\n";
+    }
+
+    ImGui::SameLine();
     if (ImGui::Button("DUMB TO FILE"))
     {
         std::string filename = GetDownloadsPath();
-        std::ofstream file(filename); // Datei öffnen (erstellt, falls sie nicht existiert)
+
+        // Datei öffnen (erstellt, falls sie nicht existiert)
+        std::ofstream file(filename);
 
         if (!file.is_open()) {
-            std::cerr << "Fehler beim Öffnen der Datei!\n";
+            std::cerr << "Error while opening File!\n";
             return;
         }
 
@@ -167,6 +183,16 @@ inline void RenderPathViewer()
     if (ImGui::Button("OPEN INFO"))
     {
         std::cout << "INFO PRESSED\n";
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("CONSOLE OUTPUT"))
+    {
+        // Konsole nur jetzt erzeugen
+        EnsureConsole();
+
+        // Print
+        std::cout << "WINDOWS PATH VIEWER\n";
     }
 
     ImGui::EndChild(); // Content

@@ -55,7 +55,6 @@ inline std::vector<std::string> SplitPath(const std::string& path)
 // Setzt die PATH-Variable in der aktuellen Umgebung
 inline bool WritePathVariable(const std::string& newPath)
 {
-#ifdef _WIN32
     // Windows: Setzt die Umgebungsvariable für den aktuellen Prozess
     if (SetEnvironmentVariableA("PATH", newPath.c_str()))
         return true;
@@ -64,16 +63,6 @@ inline bool WritePathVariable(const std::string& newPath)
         std::cerr << "Error while Updating PATH: " << GetLastError() << std::endl;
         return false;
     }
-#else
-    // Unix/Linux/Mac: setenv für den aktuellen Prozess
-    if (setenv("PATH", newPath.c_str(), 1) == 0)
-        return true;
-    else
-    {
-        perror("Fehler beim Setzen von PATH");
-        return false;
-    }
-#endif
 }
 
 void OpenFileInDefaultEditor(const std::string& filepath)
