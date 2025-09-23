@@ -22,7 +22,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // Fenster erzeugen
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Path Viewer", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "WINDOWS PATH VIEWER", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cerr << "Fehler: Fenster konnte nicht erstellt werden!\n";

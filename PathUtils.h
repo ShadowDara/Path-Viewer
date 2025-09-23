@@ -6,29 +6,36 @@
 #include <windows.h>
 #endif
 
-inline std::string GetPathVariable()
+inline std::string GetDownloadsPath()
 {
-    #ifdef _WIN32
     char* buffer = nullptr;
     size_t size = 0;
-    _dupenv_s(&buffer, &size, "PATH");
-    std::string path = buffer ? buffer : "";
+    if (_dupenv_s(&buffer, &size, "USERPROFILE") != 0 || !buffer)
+        return ""; // Fehler
+    std::string downloadsPath = std::string(buffer) + "\\Downloads\\PATH-VAR-DUMB-FILE.txt";
+    free(buffer);
+    return downloadsPath;
+}
+
+// ---- Get PATH variable ----
+inline std::string GetPathVariable()
+{
+    char* buffer = nullptr;
+    size_t size = 0;
+    if (_dupenv_s(&buffer, &size, "PATH") != 0 || !buffer)
+        return "";
+    std::string path(buffer);
     free(buffer);
     return path;
-    #else
-    const char* path = std::getenv("PATH");
-    return path ? std::string(path) : "";
-    #endif
 }
 
 inline std::vector<std::string> SplitPath(const std::string& path)
 {
     std::vector<std::string> entries;
-    #ifdef _WIN32
+
+	// Only Windows uses ';' as delimiter
     char delimiter = ';';
-    #else
-    char delimiter = ':';
-    #endif
+
     std::string temp;
     for (char c : path)
     {
@@ -43,4 +50,33 @@ inline std::vector<std::string> SplitPath(const std::string& path)
     if (!temp.empty())
         entries.push_back(temp);
     return entries;
+}
+
+// Setzt die PATH-Variable in der aktuellen Umgebung
+inline bool WritePathVariable(const std::string& newPath)
+{
+#ifdef _WIN32
+    // Windows: Setzt die Umgebungsvariable für den aktuellen Prozess
+    if (SetEnvironmentVariableA("PATH", newPath.c_str()))
+        return true;
+    else
+    {
+        std::cerr << "Error while Updating PATH: " << GetLastError() << std::endl;
+        return false;
+    }
+#else
+    // Unix/Linux/Mac: setenv für den aktuellen Prozess
+    if (setenv("PATH", newPath.c_str(), 1) == 0)
+        return true;
+    else
+    {
+        perror("Fehler beim Setzen von PATH");
+        return false;
+    }
+#endif
+}
+
+void OpenFileInDefaultEditor(const std::string& filepath)
+{
+    ShellExecuteA(nullptr, "open", filepath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 }

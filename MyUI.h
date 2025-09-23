@@ -2,6 +2,10 @@
 #include "imgui.h"
 #include "PathUtils.h"
 
+#include <fstream>
+#include <string>
+#include <iostream>
+
 inline void RenderPathViewer()
 {
     // Fullscreen-Fenster Flags
@@ -25,51 +29,69 @@ inline void RenderPathViewer()
     std::string path = GetPathVariable();
     auto entries = SplitPath(path);
 
-    ImGui::Text("PATH-Einträge:");
+    ImGui::Text("WINDOWS PATH ENTRYS:");
     ImGui::Separator();
 
-    // Child für die Scrollable-Liste
-    ImGui::BeginChild("PathEntries", ImVec2(0, 650), true, ImGuiWindowFlags_HorizontalScrollbar);
+    // Scrollbares Child für die Liste, Höhe dynamisch (volle Resthöhe)
+    ImVec2 child_size = ImVec2(0, ImGui::GetContentRegionAvail().y - ImGui::GetFrameHeightWithSpacing());
+    ImGui::BeginChild("PathEntries", child_size, true, ImGuiWindowFlags_HorizontalScrollbar);
 
-    static std::vector<std::string> editableEntries = entries;
+    static std::vector<std::string> editableEntries;
 
-    if (editableEntries.size() != entries.size())
-        editableEntries = entries;
+    // Nur beim ersten Frame initialisieren
+    if (editableEntries.empty())
+    {
+        std::string path = GetPathVariable();
+        editableEntries = SplitPath(path);
+    }
 
+    static bool scrollToEnd = false;
+
+    // Zeichne alle InputText-Felder + Delete Buttons
     for (size_t i = 0; i < editableEntries.size(); ++i)
     {
-        std::string button_label = "Delete##" + std::to_string(i);
-        if (ImGui::Button(button_label.c_str()))
+        char buffer[4096];
+        strncpy_s(buffer, sizeof(buffer), editableEntries[i].c_str(), _TRUNCATE);
+
+        ImGui::InputText(("Entry " + std::to_string(i)).c_str(), buffer, sizeof(buffer));
+        editableEntries[i] = buffer;
+
+        ImGui::SameLine();
+        if (ImGui::Button(("Delete##" + std::to_string(i)).c_str()))
         {
             editableEntries.erase(editableEntries.begin() + i);
             --i;
         }
 
         ImGui::SameLine();
+        if (ImGui::Button(("Copy##" + std::to_string(i)).c_str()))
+        {
+            ImGui::SetClipboardText(editableEntries[i].c_str());
+        }
+    }
 
-        char buffer[4096];
-        strncpy_s(buffer, sizeof(buffer), editableEntries[i].c_str(), _TRUNCATE);
-        ImGui::InputText(("Entry " + std::to_string(i)).c_str(), buffer, sizeof(buffer));
-        editableEntries[i] = buffer;
+    // Scroll ans Ende, wenn neuer Eintrag hinzugefügt
+    if (scrollToEnd)
+    {
+        ImGui::SetScrollHereY(1.0f);
+        scrollToEnd = false;
     }
 
     ImGui::EndChild(); // PathEntries
 
-    // Buttons unterhalb der Liste
-    if (ImGui::Button("Add Path")) {
+    // Buttons **unterhalb** der scrollbaren Liste
+    if (ImGui::Button("ADD PATH"))
+    {
         editableEntries.push_back("");
-        ImGui::SetScrollHereY(1.0f);
+        scrollToEnd = true; // Scroll ans neue Item
     }
 
     ImGui::SameLine();
-
-    if (ImGui::Button("Copy PATH"))
+    if (ImGui::Button("COPY PATH"))
     {
-#ifdef _WIN32
+		// Seperator für Windows PATH
         char delimiter = ';';
-#else
-        char delimiter = ':';
-#endif
+
         std::string newPath;
         for (size_t i = 0; i < editableEntries.size(); ++i)
         {
@@ -81,20 +103,72 @@ inline void RenderPathViewer()
     }
 
     ImGui::SameLine();
-
-    if (ImGui::Button("Save Paths"))
+    if (ImGui::Button("SAVE PATHS"))
     {
-        std::cout << "INFO: PATH variable copied to clipboard.\n";
+        std::cout << "Saving.\n";
+        std::string newPath;
+        for (size_t i = 0; i < editableEntries.size(); ++i) {
+            newPath += editableEntries[i];
+            newPath += ";";
+        }
+
+        //if (WritePathVariable(newPath)) {
+        //    std::cout << "PATH updated successfully.\n";
+        //}
+
+		std::cout << "New PATH:\n" << newPath << "\n";
     }
 
     ImGui::SameLine();
-
-    if (ImGui::Button("INFO"))
+    if (ImGui::Button("RELOAD PATHS"))
     {
-		std::cout << "INFO: PATH variable copied to clipboard.\n";
+		std::cout << "Reloading.\n";
+        editableEntries = entries;
     }
 
-    // Entry Ende
+    ImGui::SameLine();
+    if (ImGui::Button("DUMB TO FILE"))
+    {
+        std::string filename = GetDownloadsPath();
+        std::ofstream file(filename); // Datei öffnen (erstellt, falls sie nicht existiert)
+
+        if (!file.is_open()) {
+            std::cerr << "Fehler beim Öffnen der Datei!\n";
+            return;
+        }
+
+        std::string newPath;
+        for (size_t i = 0; i < editableEntries.size(); ++i) {
+            newPath += editableEntries[i];
+            newPath += ";";
+        }
+
+        file << newPath;
+
+        file.close(); // Datei schließen
+        std::cout << "Writed dumb File successfully!\n";
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("OPEN FILE"))
+    {   
+		std::string filename = GetDownloadsPath();
+        std::ifstream file(filename);
+
+        if (file.good()) {
+            OpenFileInDefaultEditor(filename);
+        }
+        else {
+            std::cout << "Datei existiert nicht.\n";
+        }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("OPEN INFO"))
+    {
+        std::cout << "INFO PRESSED\n";
+    }
+
     ImGui::EndChild(); // Content
     ImGui::End();      // PATH Viewer
 }
