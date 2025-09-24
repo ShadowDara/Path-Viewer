@@ -12,8 +12,9 @@ https://github.com/ocornut/imgui/archive/refs/tags/v1.92.3.zip
 
 TODO
 - INFO
-- add Software ICON
+- add Open Folder
+- 2nd Path Viewer Tab for Admin Paths
 
 BUGS
-- PATHs get duplicized
+- Admin PATHs get copyied to User Paths
 - PATHs do not get saved correctly

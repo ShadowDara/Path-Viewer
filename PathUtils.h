@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-inline std::string GetDownloadsPath()
+std::string GetDownloadsPath()
 {
     char* buffer = nullptr;
     size_t size = 0;
@@ -19,7 +19,8 @@ inline std::string GetDownloadsPath()
 }
 
 // ---- Get PATH variable ----
-inline std::string GetPathVariable()
+/*
+std::string GetPathVariable()
 {
     char* buffer = nullptr;
     size_t size = 0;
@@ -29,8 +30,37 @@ inline std::string GetPathVariable()
     free(buffer);
     return path;
 }
+*/
 
-inline std::vector<std::string> SplitPath(const std::string& path)
+std::string GetUserPathVariable()
+{
+    HKEY hKey;
+    const char* subkey = "Environment";
+    char value[32767]; // Max registry value length for environment vars
+    DWORD value_length = sizeof(value);
+    DWORD type = 0;
+
+    // Open the key for the current user
+    if (RegOpenKeyExA(HKEY_CURRENT_USER, subkey, 0, KEY_READ, &hKey) != ERROR_SUCCESS)
+        return "";
+
+    // Query the PATH value
+    if (RegQueryValueExA(hKey, "Path", nullptr, &type, reinterpret_cast<LPBYTE>(value), &value_length) != ERROR_SUCCESS)
+    {
+        RegCloseKey(hKey);
+        return "";
+    }
+
+    RegCloseKey(hKey);
+
+    // Ensure the value is a string
+    if (type != REG_SZ && type != REG_EXPAND_SZ)
+        return "";
+
+    return std::string(value);
+}
+
+std::vector<std::string> SplitPath(const std::string& path)
 {
     std::vector<std::string> entries;
 

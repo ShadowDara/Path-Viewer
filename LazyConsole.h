@@ -3,7 +3,7 @@
 #include <cstdio>
 
 // Function to open the console
-inline void EnsureConsole()
+void EnsureConsole()
 {
     // Var to check if the Console Window is opened
     static bool consoleOpen = false;
