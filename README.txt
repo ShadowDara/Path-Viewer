@@ -13,3 +13,7 @@ https://github.com/ocornut/imgui/archive/refs/tags/v1.92.3.zip
 TODO
 - INFO
 - add Software ICON
+
+BUGS
+- PATHs get duplicized
+- PATHs do not get saved correctly

@@ -2,9 +2,12 @@
 #include <iostream>
 #include <cstdio>
 
+// Function to open the console
 inline void EnsureConsole()
 {
+    // Var to check if the Console Window is opened
     static bool consoleOpen = false;
+
     if (!consoleOpen)
     {
         AllocConsole(); // Konsole erzeugen

@@ -7,15 +7,19 @@
 #include <iostream>
 
 #include "LazyConsole.h"
+#include "GetEntries.h"
+
+#include <cstdlib>
+#include <sstream>
 
 inline void RenderPathViewer()
 {
     // Fullscreen-Fenster Flags
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar |
-        ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoScrollbar |
-        ImGuiWindowFlags_NoCollapse;
+                                    ImGuiWindowFlags_NoResize |
+                                    ImGuiWindowFlags_NoMove |
+                                    ImGuiWindowFlags_NoScrollbar |
+                                    ImGuiWindowFlags_NoCollapse;
 
     // Vollbild-Fenster setzen
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -56,20 +60,27 @@ inline void RenderPathViewer()
         char buffer[4096];
         strncpy_s(buffer, sizeof(buffer), editableEntries[i].c_str(), _TRUNCATE);
 
-        ImGui::InputText(("Entry " + std::to_string(i)).c_str(), buffer, sizeof(buffer));
+        ImGui::InputText(("Entry " + std::to_string(i + 1)).c_str(), buffer, sizeof(buffer));
         editableEntries[i] = buffer;
 
         ImGui::SameLine();
-        if (ImGui::Button(("Delete##" + std::to_string(i)).c_str()))
+        if (ImGui::Button(("Delete##" + std::to_string(i + 1)).c_str()))
         {
             editableEntries.erase(editableEntries.begin() + i);
             --i;
         }
 
         ImGui::SameLine();
-        if (ImGui::Button(("Copy##" + std::to_string(i)).c_str()))
+        if (ImGui::Button(("Copy##" + std::to_string(i + 1)).c_str()))
         {
             ImGui::SetClipboardText(editableEntries[i].c_str());
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button(("Select Folder##" + std::to_string(i + 1)).c_str()))
+        {
+            // Add soon
+            // OpenFolderDialog(editableEntries[i]);
         }
     }
 
@@ -83,16 +94,26 @@ inline void RenderPathViewer()
     ImGui::EndChild(); // PathEntries
 
     // Buttons **unterhalb** der scrollbaren Liste
+
+    // Add new PATH Entry
     if (ImGui::Button("ADD PATH"))
     {
         editableEntries.push_back("");
         scrollToEnd = true; // Scroll ans neue Item
     }
 
+    // Select Folder to Add
+    ImGui::SameLine();
+    if (ImGui::Button("SELECT FOLDER TO ADD"))
+    {
+        // OpenFolderDialog(editableEntries[i]);
+    }
+
+    // Copy all PATH to Clipboard
     ImGui::SameLine();
     if (ImGui::Button("COPY PATH"))
     {
-		// Seperator für Windows PATH
+        // Seperator für Windows PATH
         char delimiter = ';';
 
         std::string newPath;
@@ -105,44 +126,64 @@ inline void RenderPathViewer()
         ImGui::SetClipboardText(newPath.c_str());
     }
 
+    // Save PATH
     ImGui::SameLine();
     if (ImGui::Button("SAVE PATHS"))
     {
-        std::cout << "Saving.\n";
         std::string newPath;
-        for (size_t i = 0; i < editableEntries.size(); ++i) {
+
+        for (size_t i = 0; i < editableEntries.size(); ++i)
+        {
             newPath += editableEntries[i];
             newPath += ";";
         }
 
-        if (SetUserPath(newPath)) {
+        if (SetUserPath(newPath))
+        {
+            EnsureConsole();
             std::cout << "PATH updated successfully.\n";
-		}
-		else {
-			std::cout << "Failed to update PATH.\n";
-		}
+        }
+        else
+        {
+            EnsureConsole();
+            std::cout << "Failed to update PATH.\n";
+        }
 
-		std::cout << "New PATH:\n" << newPath << "\n";
+        EnsureConsole();
+        std::cout << "New PATH:\n"
+                  << newPath << "\n";
+        
+        std::cout << "===============================\n\n";
+        std::cout << " PATH updated successfully !!!\n\n";
+        std::cout << "===============================";
     }
 
+    // Reload PATH
     ImGui::SameLine();
     if (ImGui::Button("RELOAD PATHS"))
     {
-		std::cout << "Reloading.\n";
-        editableEntries = entries;
+        editableEntries = get_new_entries();
+        std::cout << "Reloaded.\n";
     }
 
+    // Dumb PATH to Console
     ImGui::SameLine();
     if (ImGui::Button("DUMB TO CONSOLE"))
     {
         std::string newPath;
-        for (size_t i = 0; i < editableEntries.size(); ++i) {
+
+        for (size_t i = 0; i < editableEntries.size(); ++i)
+        {
             newPath += editableEntries[i];
             newPath += ";";
         }
-		std::cout << "DUMB VARS TO CONSOLE:\n" << newPath << "\n";
+
+        EnsureConsole();
+        std::cout << "DUMB VARS TO CONSOLE:\n"
+                  << newPath << "\n";
     }
 
+    // Dumb PATH to File
     ImGui::SameLine();
     if (ImGui::Button("DUMB TO FILE"))
     {
@@ -151,13 +192,16 @@ inline void RenderPathViewer()
         // Datei öffnen (erstellt, falls sie nicht existiert)
         std::ofstream file(filename);
 
-        if (!file.is_open()) {
+        if (!file.is_open())
+        {
+            EnsureConsole();
             std::cerr << "Error while opening File!\n";
             return;
         }
 
         std::string newPath;
-        for (size_t i = 0; i < editableEntries.size(); ++i) {
+        for (size_t i = 0; i < editableEntries.size(); ++i)
+        {
             newPath += editableEntries[i];
             newPath += ";";
         }
@@ -165,29 +209,38 @@ inline void RenderPathViewer()
         file << newPath;
 
         file.close(); // Datei schließen
+
+        EnsureConsole();
         std::cout << "Writed dumb File successfully!\n";
     }
 
+    // Open DUMB File in Default Editor
     ImGui::SameLine();
     if (ImGui::Button("OPEN FILE"))
-    {   
-		std::string filename = GetDownloadsPath();
+    {
+        std::string filename = GetDownloadsPath();
         std::ifstream file(filename);
 
-        if (file.good()) {
+        if (file.good())
+        {
             OpenFileInDefaultEditor(filename);
         }
-        else {
-            std::cout << "Datei existiert nicht.\n";
+        else
+        {
+            EnsureConsole();
+            std::cout << "File does not exist.\n";
         }
     }
 
+    // Info Button
     ImGui::SameLine();
     if (ImGui::Button("OPEN INFO"))
     {
+        EnsureConsole();
         std::cout << "INFO PRESSED\n";
     }
 
+    // OPEN CONSOLE OUTPUT
     ImGui::SameLine();
     if (ImGui::Button("OPEN CONSOLE OUTPUT"))
     {
@@ -198,6 +251,7 @@ inline void RenderPathViewer()
         std::cout << "WINDOWS PATH VIEWER\n";
     }
 
+    // END
     ImGui::EndChild(); // Content
     ImGui::End();      // PATH Viewer
 }

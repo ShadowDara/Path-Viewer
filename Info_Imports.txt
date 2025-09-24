@@ -1,2 +1,5 @@
+GLFW
 https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip
+
+ImGui
 https://github.com/ocornut/imgui/archive/refs/tags/v1.92.3.zip
