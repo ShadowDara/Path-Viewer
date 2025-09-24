@@ -115,9 +115,12 @@ inline void RenderPathViewer()
             newPath += ";";
         }
 
-        if (WritePathVariable(newPath)) {
+        if (SetUserPath(newPath)) {
             std::cout << "PATH updated successfully.\n";
-        }
+		}
+		else {
+			std::cout << "Failed to update PATH.\n";
+		}
 
 		std::cout << "New PATH:\n" << newPath << "\n";
     }

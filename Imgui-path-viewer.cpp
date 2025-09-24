@@ -1,9 +1,13 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
+#define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3.h"
+#include "GLFW/glfw3native.h"
 
 #include <windows.h>
+#include "resource.h"
 
 #include <iostream>
 
@@ -31,6 +35,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         glfwTerminate();
         return -1;
     }
+    // Nach dem Fenster erstellen:
+    HWND hwnd = glfwGetWin32Window(window); // Nur unter Windows verfügbar
+
+    HICON hIcon = LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_APP_ICON));
+    if (hIcon)
+    {
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }
+
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // V-Sync aktivieren
 

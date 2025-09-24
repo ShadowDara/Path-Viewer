@@ -53,19 +53,6 @@ inline std::vector<std::string> SplitPath(const std::string& path)
     return entries;
 }
 
-// Setzt die PATH-Variable in der aktuellen Umgebung
-inline bool WritePathVariable(const std::string& newPath)
-{
-    // Windows: Setzt die Umgebungsvariable für den aktuellen Prozess
-    if (SetEnvironmentVariableA("PATH", newPath.c_str()))
-        return true;
-    else
-    {
-        std::cerr << "Error while Updating PATH: " << GetLastError() << std::endl;
-        return false;
-    }
-}
-
 // Update Path Variables for the Logged User
 bool SetUserPath(const std::string& newPath)
 {
