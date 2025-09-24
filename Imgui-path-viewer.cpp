@@ -3,6 +3,7 @@
 #include "imgui_impl_opengl3.h"
 
 #define GLFW_EXPOSE_NATIVE_WIN32
+
 #include "GLFW/glfw3.h"
 #include "GLFW/glfw3native.h"
 
@@ -35,6 +36,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         glfwTerminate();
         return -1;
     }
+
     // Nach dem Fenster erstellen:
     HWND hwnd = glfwGetWin32Window(window); // Nur unter Windows verfügbar
 
