@@ -29,6 +29,7 @@ inline void RenderPathViewer()
 
     if (ImGui::BeginTabBar("MainTabBar"))
     {
+        #pragma region USER PATH
         if (ImGui::BeginTabItem("USER PATH ENTRIES"))
         {
             ImGui::SetWindowFontScale(1.2f);
@@ -260,7 +261,9 @@ inline void RenderPathViewer()
             // Weitere Inhalte für Tab 1
             ImGui::EndTabItem();
         }
+        #pragma endregion
 
+        #pragma region ADMIN PATH
         if (ImGui::BeginTabItem("ADMIN PATH ENTRIES"))
         {
             ImGui::SetWindowFontScale(1.2f);
@@ -489,7 +492,9 @@ inline void RenderPathViewer()
             // Weitere Inhalte für Tab 2
             ImGui::EndTabItem();
         }
+        #pragma endregion
 
+        #pragma region INFO
         if (ImGui::BeginTabItem("INFO"))
         {
             ImGui::Text("Information about the PATH Viewer");
@@ -497,8 +502,11 @@ inline void RenderPathViewer()
             ImGui::Text("Version: 0.0.1");
             ImGui::Text("Author: Shadowdara");
             ImGui::Text("Description: A tool to view and edit PATH variables.");
+            ImGui::Text("License: MIT");
+            ImGui::Text("GitHub: https://github.com/Shadowdara/Path-Viewer");
             ImGui::EndTabItem();
         }
+        #pragma endregion
 
         // End Tabs
         ImGui::EndTabBar();

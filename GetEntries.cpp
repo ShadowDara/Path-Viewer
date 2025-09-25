@@ -6,8 +6,6 @@ std::vector<std::string> get_new_entries() {
 }
 
 std::vector<std::string> get_new_admin_entries() {
-    //std::string path = GetAdminPathVariable();
-    //return SplitPath(path);
-
-    return {}; // Placeholder until implemented
+    std::string path = GetAdminPathVariable();
+    return SplitPath(path);
 }

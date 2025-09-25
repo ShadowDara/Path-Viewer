@@ -13,8 +13,5 @@ https://github.com/ocornut/imgui/archive/refs/tags/v1.92.3.zip
 TODO
 - INFO
 - add Open Folder
-- 2nd Path Viewer Tab for Admin Paths
 
-BUGS
-- Admin PATHs get copyied to User Paths
-- PATHs do not get saved correctly
+.\cloc C:\Users\shado\Documents\GitHub\Path-Viewer --exclude-dir=GLFW,imgui

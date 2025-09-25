@@ -60,6 +60,34 @@ std::string GetUserPathVariable()
     return std::string(value);
 }
 
+std::string GetAdminPathVariable()
+{
+    HKEY hKey;
+    const char* subkey = "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";
+    char value[32767]; // Max registry value length for environment vars
+    DWORD value_length = sizeof(value);
+    DWORD type = 0;
+
+    // Open the key for the local machine (admin)
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, subkey, 0, KEY_READ, &hKey) != ERROR_SUCCESS)
+        return "";
+
+    // Query the PATH value
+    if (RegQueryValueExA(hKey, "Path", nullptr, &type, reinterpret_cast<LPBYTE>(value), &value_length) != ERROR_SUCCESS)
+    {
+        RegCloseKey(hKey);
+        return "";
+    }
+
+    RegCloseKey(hKey);
+
+    // Ensure the value is a string
+    if (type != REG_SZ && type != REG_EXPAND_SZ)
+        return "";
+
+    return std::string(value);
+}
+
 std::vector<std::string> SplitPath(const std::string& path)
 {
     std::vector<std::string> entries;
