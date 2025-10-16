@@ -1,6 +1,6 @@
 Info
 
-You probably need to the programm!
+You probably need to run the programm!
 https://learn.microsoft.com/de-de/cpp/windows/latest-supported-vc-redist
 
 

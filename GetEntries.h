@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GetEntries.cpp"
 #include "PathUtils.h"
 #include <string>

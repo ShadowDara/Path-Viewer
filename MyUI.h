@@ -504,6 +504,16 @@ inline void RenderPathViewer()
             ImGui::Text("Description: A tool to view and edit PATH variables.");
             ImGui::Text("License: MIT");
             ImGui::Text("GitHub: https://github.com/Shadowdara/Path-Viewer");
+
+            if (ImGui::Button("PRINT INFO TO CONSOLE"))
+            {
+				EnsureConsole();
+				std::cout << "==============================\n\n";
+				std::cout << "       PATH VIEWER INFO       \n\n";
+                std::cout << "==============================";
+            }
+
+            // End Info Tab
             ImGui::EndTabItem();
         }
         #pragma endregion
