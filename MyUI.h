@@ -84,6 +84,7 @@ inline void RenderPathViewer()
                 ImGui::SameLine();
                 if (ImGui::Button(("Select Folder##" + std::to_string(i + 1)).c_str()))
                 {
+                    // TODO
                     // Add soon
                     // OpenFolderDialog(editableEntries[i]);
                 }
@@ -91,6 +92,7 @@ inline void RenderPathViewer()
                 ImGui::SameLine();
                 if (ImGui::Button(("Open Folder##" + std::to_string(i + 1)).c_str()))
                 {
+                    // TODO
                     // Add soon
                     // OpenFolderDialog(editableEntries[i]);
                 }
@@ -315,6 +317,7 @@ inline void RenderPathViewer()
                 ImGui::SameLine();
                 if (ImGui::Button(("Select Folder##" + std::to_string(i + 1)).c_str()))
                 {
+                    // TODO
                     // Add soon
                     // OpenFolderDialog(editableAdminEntries[i]);
                 }
@@ -322,6 +325,7 @@ inline void RenderPathViewer()
                 ImGui::SameLine();
                 if (ImGui::Button(("Open Folder##" + std::to_string(i + 1)).c_str()))
                 {
+                    // TODO
                     // Add soon
                     // OpenFolderDialog(editableAdminEntries[i]);
                 }

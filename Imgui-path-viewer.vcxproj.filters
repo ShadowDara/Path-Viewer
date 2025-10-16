@@ -48,6 +48,12 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Quelldateien\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="GetEntries.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PathUtils.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
