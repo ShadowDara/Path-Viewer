@@ -1,4 +1,13 @@
-Info
+# Path Viewer
+
+a simple Programm for Windows to easily view and edit your PATH VARIABLES.
+
+Programm needs Admin Rights to edit the Admin Path Entries
+
+Download the Programm [here](https://github.com/ShadowDara/Path-Viewer/releases)!
+
+### Program Showcase
+![](https://i.imgur.com/0GCc6nI.png)
 
 You probably need to run the programm!
 https://learn.microsoft.com/de-de/cpp/windows/latest-supported-vc-redist
@@ -11,7 +20,5 @@ https://github.com/ocornut/imgui/archive/refs/tags/v1.92.3.zip
 
 
 TODO
-- INFO
-- add Open Folder
 
 .\cloc C:\Users\shado\Documents\GitHub\Path-Viewer --exclude-dir=GLFW,imgui

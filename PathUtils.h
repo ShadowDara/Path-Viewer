@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <shobjidl.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -34,3 +35,7 @@ std::vector<std::string> SplitPath(const std::string& path);
 bool SetUserPath(const std::string& newPath);
 
 void OpenFileInDefaultEditor(const std::string& filepath);
+
+void OpenFolderDialog(const std::string& outPath);
+
+bool OpenFolderDialog(std::string& outPath);

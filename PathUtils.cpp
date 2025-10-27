@@ -1,4 +1,4 @@
-#include "PathUtils.h"
+﻿#include "PathUtils.h"
 
 std::string GetDownloadsPath()
 {
@@ -110,13 +110,14 @@ bool SetUserPath(const std::string& newPath)
         return false;
     }
 
-    // Broadcast �nderung an das System (f�r laufende Prozesse)
+    // Broadcast Änderung an das System (für laufende Prozesse)
     SendMessageTimeoutA(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
         (LPARAM)"Environment", SMTO_ABORTIFHUNG, 5000, nullptr);
 
     return true;
 }
 
+// Function to open a file in the default editor
 void OpenFileInDefaultEditor(const std::string& filepath) {
     ShellExecuteA(
         nullptr,        // hwnd
@@ -126,4 +127,64 @@ void OpenFileInDefaultEditor(const std::string& filepath) {
         nullptr,        // default directory
         SW_SHOWNORMAL   // show mode
     );
+}
+
+// Function to open a folder in Windows Explorer
+void OpenFolderDialog(const std::string& path)
+{
+    // Convert std::string → wide string (UTF-16)
+    std::wstring wPath(path.begin(), path.end());
+
+    // Open the folder in Explorer
+    ShellExecuteW(nullptr, L"open", wPath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+}
+
+// Function to open a folder selection dialog and return the selected path
+bool OpenFolderDialog(std::string& outPath)
+{
+    bool result = false;
+
+    // COM initialisieren
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    if (FAILED(hr)) return false;
+
+    IFileDialog* pFileDialog = nullptr;
+    hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog));
+    if (SUCCEEDED(hr))
+    {
+        // Ordner-Auswahl aktivieren
+        DWORD options;
+        pFileDialog->GetOptions(&options);
+        pFileDialog->SetOptions(options | FOS_PICKFOLDERS);
+
+        // Dialog anzeigen
+        hr = pFileDialog->Show(nullptr);
+        if (SUCCEEDED(hr))
+        {
+            IShellItem* pItem;
+            hr = pFileDialog->GetResult(&pItem);
+            if (SUCCEEDED(hr))
+            {
+                PWSTR pszFilePath = nullptr;
+                pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+                if (pszFilePath)
+                {
+                    // wchar_t* → std::string
+                    int size_needed = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, nullptr, 0, nullptr, nullptr);
+                    outPath.resize(size_needed - 1);               // Platz für alle Zeichen ohne Nullterminator
+                    WideCharToMultiByte(CP_UTF8, 0, pszFilePath, -1, &outPath[0], size_needed, nullptr, nullptr);
+
+                    CoTaskMemFree(pszFilePath);
+                    result = true;
+                }
+
+                pItem->Release();
+            }
+        }
+        pFileDialog->Release();
+    }
+
+    CoUninitialize();
+    return result;
 }

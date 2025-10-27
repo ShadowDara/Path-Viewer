@@ -6,12 +6,12 @@
 #include <iostream>
 #include <cstdio>
 
+// Global variable to track console state
+static bool consoleOpen = false;
+
 // Function to open the console
 void EnsureConsole()
 {
-    // Var to check if the Console Window is opened
-    static bool consoleOpen = false;
-
     if (!consoleOpen)
     {
         AllocConsole(); // Konsole erzeugen
@@ -19,5 +19,15 @@ void EnsureConsole()
         freopen_s(&fp, "CONOUT$", "w", stdout);
         freopen_s(&fp, "CONOUT$", "w", stderr);
         consoleOpen = true;
+    }
+}
+
+// Function to close the console
+void CloseConsole()
+{
+    if (consoleOpen)
+    {
+        FreeConsole(); // Trennt dein Programm vom Konsolenfenster
+        consoleOpen = false;
     }
 }

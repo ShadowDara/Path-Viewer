@@ -12,6 +12,11 @@
 #include <cstdlib>
 #include <sstream>
 
+// TODO
+// The Complete UI for the PATH Viewer closes when you close
+// an opened terminal window. Find a solution for that!
+// SOON!
+
 inline void RenderPathViewer()
 {
     // Fullscreen-Fenster Flags
@@ -30,6 +35,7 @@ inline void RenderPathViewer()
     if (ImGui::BeginTabBar("MainTabBar"))
     {
         #pragma region USER PATH
+
         if (ImGui::BeginTabItem("USER PATH ENTRIES"))
         {
             ImGui::SetWindowFontScale(1.2f);
@@ -68,6 +74,7 @@ inline void RenderPathViewer()
                 ImGui::InputText(("Entry " + std::to_string(i + 1)).c_str(), buffer, sizeof(buffer));
                 editableEntries[i] = buffer;
 
+				// Delete Entry
                 ImGui::SameLine();
                 if (ImGui::Button(("Delete##" + std::to_string(i + 1)).c_str()))
                 {
@@ -75,26 +82,30 @@ inline void RenderPathViewer()
                     --i;
                 }
 
+				// Copy Entry to Clipboard
                 ImGui::SameLine();
                 if (ImGui::Button(("Copy##" + std::to_string(i + 1)).c_str()))
                 {
                     ImGui::SetClipboardText(editableEntries[i].c_str());
                 }
 
+				// Select a new Folder for this Entry
                 ImGui::SameLine();
                 if (ImGui::Button(("Select Folder##" + std::to_string(i + 1)).c_str()))
                 {
-                    // TODO
-                    // Add soon
-                    // OpenFolderDialog(editableEntries[i]);
+                    std::string path;
+                    if (OpenFolderDialog(path))
+                    {
+                        editableEntries[i] = path;
+                        std::cout << "Selected folder: " << path << std::endl;
+                    }
                 }
 
+				// Open Folder of this Entry in the Explorer
                 ImGui::SameLine();
                 if (ImGui::Button(("Open Folder##" + std::to_string(i + 1)).c_str()))
                 {
-                    // TODO
-                    // Add soon
-                    // OpenFolderDialog(editableEntries[i]);
+                    OpenFolderDialog(editableEntries[i]);  // e.g. "C:\\Users\\me\\Documents"
                 }
             }
 
@@ -120,7 +131,12 @@ inline void RenderPathViewer()
             ImGui::SameLine();
             if (ImGui::Button("SELECT FOLDER TO ADD"))
             {
-                // OpenFolderDialog(editableEntries[i]);
+                std::string path;
+                if (OpenFolderDialog(path))
+                {
+					editableEntries.push_back(path);
+                    std::cout << "Selected folder: " << path << std::endl;
+                }
             }
 
             // Copy all PATH to Clipboard
@@ -164,12 +180,14 @@ inline void RenderPathViewer()
                 }
 
                 EnsureConsole();
-                std::cout << "New PATH:\n"
-                          << newPath << "\n";
+                std::cout << "New PATH:\n" << newPath << "\n";
 
-                std::cout << "===============================\n\n";
-                std::cout << " PATH updated successfully !!!\n\n";
-                std::cout << "===============================\n";
+                SYSTEMTIME st;
+                GetLocalTime(&st); // Füllt SYSTEMTIME mit aktueller lokaler Zeit                    
+
+                std::cout << "===================================================================\n\n";
+                std::cout << " PATH updated successfully at " << st.wHour << ":" << st.wMinute << ":" << st.wSecond << " !!!\n" << std::endl;
+                std::cout << "==================================================================\n\n";
             }
 
             // Reload PATH
@@ -193,8 +211,7 @@ inline void RenderPathViewer()
                 }
 
                 EnsureConsole();
-                std::cout << "DUMB VARS TO CONSOLE:\n"
-                          << newPath << "\n";
+                std::cout << "DUMB VARS TO CONSOLE:\n" << newPath << "\n\n";
             }
 
             // Dumb PATH to File
@@ -255,6 +272,15 @@ inline void RenderPathViewer()
 
                 // Print
                 std::cout << "WINDOWS PATH VIEWER\n";
+				std::cout << "\nDO NOT CLOSE THIS CONSOLE WINDOW BEFORE CLICKING 'CLOSE CONSOLE' \nIN THE PATH VIEWER!\n\n";
+            }
+
+            // CLOSE CONSOLE WINDOW
+            ImGui::SameLine();
+            if (ImGui::Button("CLOSE CONSOLE"))
+            {
+                std::cout << "\nYou can now close this Console Window with the X\nwithout closing the Path Viewer Program.\n\n";
+                CloseConsole();
             }
 
             // END
@@ -266,6 +292,7 @@ inline void RenderPathViewer()
         #pragma endregion
 
         #pragma region ADMIN PATH
+
         if (ImGui::BeginTabItem("ADMIN PATH ENTRIES"))
         {
             ImGui::SetWindowFontScale(1.2f);
@@ -308,26 +335,30 @@ inline void RenderPathViewer()
                     --i;
                 }
 
+				// Copy Entry to Clipboard
                 ImGui::SameLine();
                 if (ImGui::Button(("Copy##" + std::to_string(i + 1)).c_str()))
                 {
                     ImGui::SetClipboardText(editableAdminEntries[i].c_str());
                 }
 
+                // Select a new Folder for this Entry
                 ImGui::SameLine();
                 if (ImGui::Button(("Select Folder##" + std::to_string(i + 1)).c_str()))
                 {
-                    // TODO
-                    // Add soon
-                    // OpenFolderDialog(editableAdminEntries[i]);
+                    std::string path;
+                    if (OpenFolderDialog(path))
+                    {
+                        editableAdminEntries[i] = path;
+                        std::cout << "Selected folder: " << path << std::endl;
+                    }
                 }
 
+                // Open Folder of this Entry in the Explorer
                 ImGui::SameLine();
                 if (ImGui::Button(("Open Folder##" + std::to_string(i + 1)).c_str()))
                 {
-                    // TODO
-                    // Add soon
-                    // OpenFolderDialog(editableAdminEntries[i]);
+                    OpenFolderDialog(editableAdminEntries[i]);  // e.g. "C:\\Users\\me\\Documents"
                 }
             }
 
@@ -354,7 +385,12 @@ inline void RenderPathViewer()
             ImGui::SameLine();
             if (ImGui::Button("SELECT FOLDER TO ADD"))
             {
-                // OpenFolderDialog(editableEntries[i]);
+                std::string path;
+                if (OpenFolderDialog(path))
+                {
+					editableAdminEntries.push_back(path);
+                    std::cout << "Selected folder: " << path << std::endl;
+                }
             }
 
             // Copy all PATH to Clipboard
@@ -398,12 +434,14 @@ inline void RenderPathViewer()
                 }
 
                 EnsureConsole();
-                std::cout << "New PATH:\n"
-                          << newPath << "\n";
+                std::cout << "New PATH:\n" << newPath << "\n";
 
-                std::cout << "===============================\n\n";
-                std::cout << " PATH updated successfully !!!\n\n";
-                std::cout << "===============================\n";
+                SYSTEMTIME st;
+                GetLocalTime(&st); // Füllt SYSTEMTIME mit aktueller lokaler Zeit                    
+
+                std::cout << "===================================================================\n\n";
+                std::cout << " PATH updated successfully at " << st.wHour << ":" << st.wMinute << ":" << st.wSecond << " !!!\n" << std::endl;
+                std::cout << "==================================================================\n\n";
             }
 
             // Reload PATH
@@ -427,8 +465,7 @@ inline void RenderPathViewer()
                 }
 
                 EnsureConsole();
-                std::cout << "DUMB VARS TO CONSOLE:\n"
-                          << newPath << "\n";
+                std::cout << "DUMB VARS TO CONSOLE:\n" << newPath << "\n\n";
             }
 
             // Dumb PATH to File
@@ -489,6 +526,15 @@ inline void RenderPathViewer()
 
                 // Print
                 std::cout << "WINDOWS PATH VIEWER\n";
+                std::cout << "\nDO NOT CLOSE THIS CONSOLE WINDOW BEFORE CLICKING 'CLOSE CONSOLE' \nIN THE PATH VIEWER!\n\n";
+            }
+
+            // CLOSE CONSOLE WINDOW
+            ImGui::SameLine();
+            if (ImGui::Button("CLOSE CONSOLE"))
+            {
+                std::cout << "\nYou can now close this Console Window with the X\nwithout closing the Path Viewer Program.\n\n";
+                CloseConsole();
             }
 
             ImGui::EndChild(); 
@@ -514,7 +560,13 @@ inline void RenderPathViewer()
 				EnsureConsole();
 				std::cout << "==============================\n\n";
 				std::cout << "       PATH VIEWER INFO       \n\n";
-                std::cout << "==============================";
+                std::cout << "==============================\n\n";
+				std::cout << "Version: 0.0.1\n\n";
+				std::cout << "Author: Shadowdara\n\n";
+				std::cout << "Description: A tool to view and edit PATH variables.\n\n";
+				std::cout << "License: MIT\n\n";
+                std::cout << "GitHub:\n\n";
+                std::cout << "https://github.com/Shadowdara/Path-Viewer";
             }
 
             // End Info Tab
