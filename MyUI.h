@@ -545,8 +545,10 @@ inline void RenderPathViewer()
         #pragma endregion
 
         #pragma region INFO
+
         if (ImGui::BeginTabItem("INFO"))
         {
+            // PRINT INFORMATION ABOUT THE PATH VIEWER TO THE SCREEN
             ImGui::Text("Information about the PATH Viewer");
             ImGui::Separator();
             ImGui::Text("Version: 0.0.1");
@@ -555,6 +557,7 @@ inline void RenderPathViewer()
             ImGui::Text("License: MIT");
             ImGui::Text("GitHub: https://github.com/Shadowdara/Path-Viewer");
 
+            // PRINT TO CONSOLE WINDOW
             if (ImGui::Button("PRINT INFO TO CONSOLE"))
             {
 				EnsureConsole();
@@ -566,7 +569,15 @@ inline void RenderPathViewer()
 				std::cout << "Description: A tool to view and edit PATH variables.\n\n";
 				std::cout << "License: MIT\n\n";
                 std::cout << "GitHub:\n\n";
-                std::cout << "https://github.com/Shadowdara/Path-Viewer";
+                std::cout << "https://github.com/Shadowdara/Path-Viewer\n\n";
+            }
+
+            // CLOSE CONSOLE WINDOW
+            ImGui::SameLine();
+            if (ImGui::Button("CLOSE CONSOLE"))
+            {
+                std::cout << "\nYou can now close this Console Window with the X\nwithout closing the Path Viewer Program.\n\n";
+                CloseConsole();
             }
 
             // End Info Tab

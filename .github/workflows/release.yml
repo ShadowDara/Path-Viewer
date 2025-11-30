@@ -1,0 +1,56 @@
+name: Build & Release (MSVC)
+
+on:
+  push:
+    tags:
+      - "v*"        # Build only when pushing a version tag (e.g. v1.0.0)
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install MSBuild + VS developer tools
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      # Build the solution (.sln)
+      - name: Build with MSBuild
+        run: |
+          msbuild MyProject.sln ^
+            /p:Configuration=Release ^
+            /p:Platform=x64
+
+      # Upload build output as an artifact (optional but useful for debugging)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            **/Release/*.exe
+            **/Release/*.dll
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Required to create releases
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      # Create a GitHub Release for the tag
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.exe
+            *.dll
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
