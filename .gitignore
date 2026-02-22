@@ -3,3 +3,7 @@
 /x64
 imgui.ini
 Imgui-path-viewer.vcxproj.user
+*.TMP
+
+# Auto generated files
+*.aps

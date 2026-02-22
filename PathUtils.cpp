@@ -1,5 +1,6 @@
 ﻿#include "PathUtils.h"
 
+// Function to get the Downloads folder path for the current user
 std::string GetDownloadsPath()
 {
     char* buffer = nullptr;
@@ -11,6 +12,7 @@ std::string GetDownloadsPath()
     return downloadsPath;
 }
 
+// Get the user-specific PATH variable (non-admin)
 std::string GetUserPathVariable()
 {
     HKEY hKey;
@@ -39,6 +41,7 @@ std::string GetUserPathVariable()
     return std::string(value);
 }
 
+// Get the system-wide PATH variable (admin)
 std::string GetAdminPathVariable()
 {
     HKEY hKey;
@@ -67,6 +70,7 @@ std::string GetAdminPathVariable()
     return std::string(value);
 }
 
+// Function to split a PATH variable into individual entries
 std::vector<std::string> SplitPath(const std::string& path)
 {
     std::vector<std::string> entries;

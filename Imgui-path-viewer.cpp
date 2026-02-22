@@ -15,6 +15,7 @@
 #include "MyUI.h"
 
 // Main code
+// Main Function
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // GLFW initialisieren
@@ -53,7 +54,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // ImGui Context erzeugen
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO& io = ImGui::GetIO();
+    io.IniFilename = nullptr;   // <- deaktiviert imgui.ini komplett
 
     // Style setzen
     ImGui::StyleColorsDark();

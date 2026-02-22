@@ -201,6 +201,7 @@
     <ClCompile Include="PathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GetEntries.h" />
     <ClInclude Include="glfw\glfw3.h" />
     <ClInclude Include="GLFW\glfw3native.h" />
     <ClInclude Include="imgui\imconfig.h" />

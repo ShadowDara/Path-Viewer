@@ -1,2 +1,4 @@
 #include "resource.h"
 IDI_APP_ICON ICON "appicon.ico"
+
+// add the App ICON
